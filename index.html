@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rajabhaktula Dinesh | Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #0f172a 0, #020617 45%, #000 100%);
+      color: #e5e7eb;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    .container { max-width: 1080px; margin: 0 auto; padding: 0 1.2rem; }
+
+    /* ---------- INTRO OVERLAY (CENTER NAME) ---------- */
+    .intro-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 999;
+      background: radial-gradient(circle at center, #020617 0, #000 50%, #020617 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 1.2s ease, transform 1.2s ease;
+    }
+    .intro-inner {
+      text-align: center;
+      padding: 2rem 2.6rem;
+      border-radius: 1.6rem;
+      background: radial-gradient(circle at top, rgba(15,23,42,0.95), rgba(2,6,23,0.98));
+      border: 1px solid rgba(148,163,184,0.5);
+      box-shadow: 0 30px 90px rgba(15,23,42,0.9);
+      transform: scale(1);
+      animation: pulseGlow 2.4s ease-in-out infinite;
+    }
+    .intro-tag {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: #9ca3af;
+      margin-bottom: 0.8rem;
+    }
+    .intro-name {
+      font-size: clamp(2.2rem, 4vw, 3rem);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      background: linear-gradient(to right, #38bdf8, #a855f7);
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 0.4rem;
+    }
+    .intro-role {
+      font-size: 0.9rem;
+      color: #cbd5f5;
+      margin-bottom: 1rem;
+    }
+    .intro-hint {
+      font-size: 0.8rem;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .intro-overlay.hidden {
+      opacity: 0;
+      transform: scale(1.12);   /* slowly zooms out while fading */
+      pointer-events: none;
+    }
+
+    @keyframes pulseGlow {
+      0%,100% { box-shadow: 0 26px 70px rgba(56,189,248,0.36); }
+      50% { box-shadow: 0 30px 90px rgba(168,85,247,0.4); }
+    }
+
+    /* ---------- MAIN SITE (SLOW OPEN FROM MIDDLE) ---------- */
+    .page-wrap {
+      opacity: 0;
+      transform: scale(0.86);   /* start smaller in center */
+      filter: blur(4px);
+      transition: opacity 1.2s ease, transform 1.2s ease, filter 1.2s ease;
+    }
+    .page-wrap.active {
+      opacity: 1;
+      transform: scale(1);      /* slowly grows to full size */
+      filter: blur(0);
+    }
+
+    /* HEADER + NAV */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(16px);
+      background: linear-gradient(to right, rgba(15,23,42,0.95), rgba(15,23,42,0.7));
+      border-bottom: 1px solid rgba(148,163,184,0.25);
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.9rem 0;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      font-size: 0.88rem;
+      color: #e5e7eb;
+    }
+    .logo-mark {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: conic-gradient(from 160deg, #38bdf8, #22c55e, #a855f7, #38bdf8);
+      position: relative;
+      overflow: hidden;
+    }
+    .logo-mark::after {
+      content: "";
+      position: absolute;
+      inset: 4px;
+      border-radius: inherit;
+      background: #020617;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1.2rem;
+      position: relative;
+    }
+    .nav-item {
+      position: relative;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: #9ca3af;
+      cursor: pointer;
+      padding: 0.4rem 0;
+    }
+    .nav-item span { position: relative; z-index: 2; }
+    .nav-item::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 999px;
+      background: radial-gradient(circle at top, rgba(56,189,248,0.12), transparent 65%);
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .nav-item::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(to right, #38bdf8, #a855f7);
+      transition: width 0.25s ease;
+    }
+    .nav-item:hover {
+      color: #f9fafb;
+    }
+    .nav-item:hover::before { opacity: 1; }
+    .nav-item:hover::after { width: 100%; }
+
+    /* Hover preview panel */
+    .preview-panel {
+      position: absolute;
+      top: 120%;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      width: 260px;
+      padding: 0.9rem 1rem;
+      border-radius: 1rem;
+      background: radial-gradient(circle at top left, rgba(56,189,248,0.18), rgba(15,23,42,0.97));
+      box-shadow: 0 18px 40px rgba(15,23,42,0.85);
+      border: 1px solid rgba(148,163,184,0.4);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.22s ease, transform 0.22s ease;
+    }
+    .nav-item:hover .preview-panel {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+    .preview-title {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #a5b4fc;
+      margin-bottom: 0.4rem;
+    }
+    .preview-heading {
+      font-size: 0.98rem;
+      font-weight: 600;
+      margin-bottom: 0.35rem;
+    }
+    .preview-text {
+      font-size: 0.8rem;
+      color: #cbd5f5;
+    }
+
+    /* HERO */
+    .hero {
+      padding: 3.2rem 0 2.6rem;
+    }
+    .hero-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.1fr);
+      gap: 2.6rem;
+      align-items: center;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.25rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid rgba(148,163,184,0.5);
+      background: rgba(15,23,42,0.85);
+      color: #9ca3af;
+      font-size: 0.74rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      margin-bottom: 0.8rem;
+    }
+    .pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: radial-gradient(circle, #22c55e, #16a34a);
+      box-shadow: 0 0 10px rgba(34,197,94,0.9);
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 3.1vw, 2.6rem);
+      line-height: 1.1;
+      margin-bottom: 0.7rem;
+    }
+    .hero h1 span {
+      background: linear-gradient(to right, #38bdf8, #a855f7);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    .hero-sub {
+      color: #9ca3af;
+      font-size: 0.98rem;
+      margin-bottom: 1rem;
+    }
+    .hero-body {
+      font-size: 0.9rem;
+      color: #cbd5f5;
+      max-width: 480px;
+      margin-bottom: 1.5rem;
+    }
+    .hero-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin-bottom: 1.2rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.6rem 1.4rem;
+      border-radius: 999px;
+      font-size: 0.86rem;
+      text-decoration: none;
+      cursor: pointer;
+      border: 1px solid transparent;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+    .btn-primary {
+      background: linear-gradient(to right, #38bdf8, #a855f7);
+      color: #020617;
+      font-weight: 600;
+      box-shadow: 0 10px 30px rgba(56,189,248,0.35);
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 40px rgba(56,189,248,0.45);
+    }
+    .btn-ghost {
+      background: rgba(15,23,42,0.8);
+      color: #e5e7eb;
+      border-color: rgba(148,163,184,0.5);
+    }
+    .btn-ghost:hover {
+      background: rgba(15,23,42,0.95);
+      border-color: #38bdf8;
+      transform: translateY(-1px);
+    }
+
+    .hero-orbit {
+      position: relative;
+      width: 260px;
+      height: 260px;
+      margin: 0 auto;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 20%, #38bdf8, #0f172a 55%, #020617 100%);
+      border: 1px solid rgba(148,163,184,0.5);
+      box-shadow: 0 18px 40px rgba(15,23,42,0.9);
+      overflow: hidden;
+    }
+    .hero-orbit-inner {
+      position: absolute;
+      inset: 18px;
+      border-radius: inherit;
+      border: 1px dashed rgba(148,163,184,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 1.2rem;
+      font-size: 0.9rem;
+      color: #e5e7eb;
+    }
+
+    section {
+      padding: 2.6rem 0 1.8rem;
+    }
+    .section-label {
+      font-size: 0.76rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #6b7280;
+      margin-bottom: 0.2rem;
+    }
+    .section-title {
+      font-size: 1.4rem;
+      margin-bottom: 0.8rem;
+    }
+    .section-sub {
+      font-size: 0.9rem;
+      color: #9ca3af;
+      margin-bottom: 1.4rem;
+      max-width: 520px;
+    }
+
+    /* Simple placeholder for skills/contact content */
+    .placeholder-box {
+      border-radius: 1rem;
+      padding: 1rem;
+      border: 1px dashed rgba(148,163,184,0.6);
+      background: rgba(15,23,42,0.7);
+      font-size: 0.9rem;
+      color: #cbd5f5;
+    }
+
+    /* Projects grid & cards (4 stylish gradient blocks) */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.4rem;
+      margin-top: 0.5rem;
+    }
+    .project-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 1.1rem;
+      border: 1px solid rgba(148,163,184,0.55);
+      background: radial-gradient(circle at top left, rgba(15,23,42,0.96), rgba(15,23,42,0.98));
+      box-shadow: 0 18px 40px rgba(15,23,42,0.85);
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    }
+    .project-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 22px 48px rgba(15,23,42,0.98);
+      border-color: #38bdf8;
+    }
+    .project-gradient {
+      position: absolute;
+      inset: -40%;
+      opacity: 0.55;
+      mix-blend-mode: screen;
+      pointer-events: none;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .project-card:hover .project-gradient {
+      transform: scale(1.05) translateY(-4px);
+      opacity: 0.75;
+    }
+    .project-1 {
+      background: radial-gradient(circle at 10% 0, #38bdf8, transparent 55%),
+                  radial-gradient(circle at 90% 100%, #22c55e, transparent 55%);
+    }
+    .project-2 {
+      background: radial-gradient(circle at 0 100%, #a855f7, transparent 55%),
+                  radial-gradient(circle at 100% 0, #38bdf8, transparent 55%);
+    }
+    .project-3 {
+      background: radial-gradient(circle at 10% 10%, #f97316, transparent 55%),
+                  radial-gradient(circle at 90% 90%, #38bdf8, transparent 55%);
+    }
+    .project-4 {
+      background: radial-gradient(circle at 0 50%, #ec4899, transparent 55%),
+                  radial-gradient(circle at 100% 50%, #22c55e, transparent 55%);
+    }
+    .project-content {
+      position: relative;
+      padding: 1rem 1rem 0.95rem;
+      background: linear-gradient(to bottom, rgba(15,23,42,0.9), rgba(15,23,42,0.98));
+    }
+    .project-meta {
+      font-size: 0.78rem;
+      color: #9ca3af;
+      margin-bottom: 0.35rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+    .project-title {
+      font-size: 1.02rem;
+      margin-bottom: 0.3rem;
+      font-weight: 600;
+    }
+    .project-desc {
+      font-size: 0.87rem;
+      color: #cbd5f5;
+      margin-bottom: 0.7rem;
+    }
+    .project-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      margin-bottom: 0.6rem;
+    }
+    .project-tags span {
+      font-size: 0.76rem;
+      padding: 0.18rem 0.55rem;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(148,163,184,0.7);
+    }
+    .project-links a {
+      font-size: 0.8rem;
+      color: #38bdf8;
+      text-decoration: none;
+      margin-right: 0.8rem;
+    }
+    .project-links a:hover {
+      text-decoration: underline;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #6b7280;
+      padding: 1.4rem 0 1.6rem;
+    }
+
+    @media (max-width: 800px) {
+      .hero-inner {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .nav-links { gap: 0.85rem; }
+    }
+    @media (max-width: 640px) {
+      nav {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.35rem;
+      }
+      .nav-links { flex-wrap: wrap; }
+      .preview-panel { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- INTRO FULLSCREEN NAME -->
+<div class="intro-overlay" id="intro">
+  <div class="intro-inner">
+    <div class="intro-tag">U to V</div>
+    <div class="intro-name">Rajabhaktula Dinesh</div>
+  </div>
+</div>
+
+<!-- MAIN PAGE CONTENT -->
+<div class="page-wrap" id="page">
+  <header>
+    <div class="container">
+      <nav>
+        <div class="logo">
+          <span><span>Rajabhaktula Dinesh</span></span>
+        </div>
+        <div class="nav-links">
+          <div class="nav-item" onclick="document.querySelector('#hero').scrollIntoView({behavior:'smooth'})">
+            <span>Home</span>
+            <div class="preview-panel">
+              <div class="preview-title">Section</div>
+              <div class="preview-heading"></div>
+              <div class="preview-text">
+                0413 Home
+              </div>
+            </div>
+          </div>
+          <div class="nav-item" onclick="document.querySelector('#about').scrollIntoView({behavior:'smooth'})">
+            <span>About</span>
+            <div class="preview-panel">
+              <div class="preview-title">About</div>
+              <div class="preview-heading"></div>
+              <div class="preview-text">
+                Who Education Interships
+              </div>
+            </div>
+          </div>
+          <div class="nav-item" onclick="document.querySelector('#projects').scrollIntoView({behavior:'smooth'})">
+            <span>Projects</span>
+            <div class="preview-panel">
+              <div class="preview-title">Projects</div>
+              <div class="preview-heading">Hands-on Work</div>
+              <div class="preview-text">
+              </div>
+            </div>
+          </div>
+          <div class="nav-item" onclick="document.querySelector('#skills').scrollIntoView({behavior:'smooth'})">
+            <span>Skills</span>
+            <div class="preview-panel">
+              <div class="preview-title">Skills</div>
+              <div class="preview-heading"></div>
+              <div class="preview-text">
+                Electrical & Systems , Software & Programming
+              </div>
+            </div>
+          </div>
+          <div class="nav-item" onclick="document.querySelector('#contact').scrollIntoView({behavior:'smooth'})">
+            <span>Contact</span>
+            <div class="preview-panel">
+              <div class="preview-title">Contact</div>
+              <div class="preview-heading">Let’s Connect</div>
+              <div class="preview-text">
+                Email, LinkedIn, GitHub.
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section id="hero" class="hero">
+    <div class="container hero-inner">
+      <div>
+        <h1>
+          Hii I am <span>Rajabhaktula</span> <span>Dinesh</span>
+          <br><br>
+        </h1>
+        <p class="hero-sub">
+          Focused on Practical, Real-World Systems
+        </p>
+        <p class="hero-body">
+          <h4>
+            I explore engineering beyond circuits and code through creative extracurricular work that blends technical reasoning with visual expression.
+            My poster work uses design as a medium to communicate ideas effectively.
+            Alongside this, I work with real-world electrical systems and software tools to analyze, document, and refine performance.
+            My approach is shaped by curiosity, iteration, and the intent to turn ideas into solutions that are both functional and expressive
+          </h4>
+        </p>
+        <br><br>
+        <b><span>Explore Design Deliver</span></b>
+        <br><br><br><br><br><br><br><br>
+        <div class="hero-buttons">
+          <a href="#projects" class="btn btn-primary">View Projects</a>
+          <a href="https://www.instagram.com/pro.ject0413/" class="btn btn-ghost">Media</a>
+        </div>
+      </div>
+      <div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <br><br>
+  <section id="about">
+    <div class="container">
+      <div class="section-label"><h3>About</h3></div>
+      <div class="section-title">Who I Am</div>
+      <p class="about-lead">
+        <p>I’m a final-year Electrical and Electronics Engineering student who enjoys building solutions that connect hardware and software.
+           I’m motivated by understanding how electrical systems behave in real-world conditions and then using software to observe, analyze, and improve their performance.</p><br>
+        <p>My work involves renewable energy systems, power electronics, motor drives, control concepts, and embedded platforms, with Python playing a key role in transforming system data into meaningful insights.
+           I enjoy breaking down complex systems, experimenting with different approaches, and refining solutions through iteration rather than relying only on theoretical answers.</p><br>
+        <p>Alongside my technical work, I actively participate in extracurricular activities that help me grow beyond academics.
+           These experiences have strengthened my creativity, teamwork, discipline, and communication skills, contributing to a more balanced engineering mindset.</p><br>
+        <p>Through projects, internships, and self-driven learning, I’ve developed a strong focus on clarity, reliability, and real-world relevance. I’m naturally curious, detail-oriented, and learn best by building and improving systems.
+           I’m currently seeking internship or entry-level opportunities where I can contribute meaningfully, learn from experienced engineers, and grow into a well-rounded professional in modern electrical engineering.</p><br>
+      </p>
+      <div class="placeholder-box">
+        <h2>Education</h2>
+        <b>Gudlavalleru Engineering College, Gudlavalleru | B.Tech | Electrical & Electronics | 2023-2026 </b><br>
+        <b>Aditya Institute of Technology & Management| Diploma | Electrical & Electronics | 2020-2023   </b><br>
+        <b> ST Ann’s Convent School | Pathapatnam | ICSE | 2020</b>
+      </div><br>
+      <div class="placeholder-box">
+        <h2> Interships</h2>
+        <h3>Java Full Stack Intern</h3>
+        <b>Skill Dzire: May 2025-June 2025</b>
+        <p class="about-lead">I completed an intensive full-stack development internship where I gained hands-on experience in building end-to-end web applications. My work involved developing responsive user interfaces using HTML, CSS, and JavaScript, implementing backend logic in Java, and integrating MySQL databases.
+        This internship helped me understand how software systems are designed, debugged, and deployed, while improving my problem-solving skills and code structure practices.
+        <h5>Key focus areas:</h5>
+        Front-end development and UI logic, Backend development using Java, Database design and integration (MySQL), Debugging and application workflow understanding.</p><br>
+
+        <h3>Electric Vehicle Design Intern</h3>
+        <b>BIST Technologies: May 2024–June 2024</b>
+        <p class="about-lead">During this internship, I worked on the design and analysis of electric vehicle systems, gaining exposure to both mechanical and electrical aspects of EV technology. I studied and analyzed components such as BLDC motors, PMSM and induction motors, controllers, batteries, and power electronics.
+        I contributed to improving vehicle range and charging efficiency through design-level optimizations, while also supporting EV infrastructure and system performance analysis.
+        <h5>Key focus areas:</h5>EV powertrain components and motor types,
+        Battery systems and power electronics, Efficiency and range optimization techniques, EV charging and infrastructure basics.</p><br>
+
+        <h3>Electrical Engineer Trainee Intern</h3>
+        <b>Vamshadhara Paper Mill Industry: Aug 2022-Jan 2023</b>
+        <p class="about-lead">As an Electrical Engineer Trainee, I gained hands-on industrial experience working with high-voltage power systems. I was involved in the operation and maintenance of a 33/11 kV substation (~5 MW) and auxiliary power systems supporting continuous manufacturing operations.
+        This role strengthened my understanding of industrial power distribution, safety practices, and system reliability, contributing to a measurable reduction in production downtime.
+        <h5>Key focus areas:</h5>
+        Operation & maintenance of 33/11 kV substations, Industrial power distribution systems, Preventive maintenance and fault handling, 
+        Electrical safety and reliability practices.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="container">
+      <div class="section-label"><h3>Projects</h3></div>
+      <div class="section-title">Selected Work</div>
+      <p class="section-sub">
+        Four projects that represent my work across automation, AI tools, renewable systems, and embedded design.
+      </p>
+
+      <div class="projects-grid">
+        <!-- Project 1 -->
+        <article class="project-card">
+          <div class="project-gradient project-1"></div>
+          <div class="project-content">
+            <div class="project-meta"> Automation</div>
+            <h3 class="project-title">Automatic Spraying Machine</h3>
+            <p class="project-desc">
+              Bluetooth-controlled automatic spraying system for disinfection and pesticide applications,
+              enabling remote operation and safer, more efficient coverage.
+            </p>
+            <div class="project-tags">
+              <span>Automation</span>
+              <span>Bluetooth Control</span>
+              <span>Safety</span>
+            </div>
+            <div class="project-links">
+              <a href="#" target="_blank">More Details</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project 2 -->
+        <article class="project-card">
+          <div class="project-gradient project-1"></div>
+          <div class="project-content">
+            <div class="project-meta">Chatbot</div>
+            <h3 class="project-title">AI Chatbot Using Python & Streamlit</h3>
+            <p class="project-desc">
+              Interactive AI-powered chatbot built with Python, Streamlit, and APIs, focused on real-time,
+              context-aware responses with efficient session handling.
+            </p>
+            <div class="project-tags">
+              <span>Python</span>
+              <span>Streamlit</span>
+              <span>AI APIs</span>
+            </div>
+            <div class="project-links">
+              <a href="#" target="_blank">GitHub</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project 3 -->
+        <article class="project-card">
+          <div class="project-gradient project-3"></div>
+          <div class="project-content">
+            <div class="project-meta">Renewable</div>
+            <h3 class="project-title">Power Backup for Rural Applications</h3>
+            <p class="project-desc">
+              Solar-based backup solution with MPPT and battery storage, designed for rural loads with focus
+              on affordability, reliability, and community awareness.
+            </p>
+            <div class="project-tags">
+              <span>Solar</span>
+              <span>MPPT</span>
+              <span>Rural Development</span>
+            </div>
+            <div class="project-links">
+              <a href="#" target="_blank">Documentation</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Project 4 -->
+        <article class="project-card">
+          <div class="project-gradient project-4"></div>
+          <div class="project-content">
+            <div class="project-meta">Embedded</div>
+            <h3 class="project-title">Temperature Display Using LM35</h3>
+            <p class="project-desc">
+              LM35-based temperature monitoring system with 8051 microcontroller, ADC processing, LCD display,
+              and ±1°C accuracy for real-time tracking.
+            </p>
+            <div class="project-tags">
+              <span>LM35</span>
+              <span>8051 MCU</span>
+              <span>Embedded</span>
+            </div>
+            <div class="project-links">
+              <a href="#" target="_blank">GitHub</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="container">
+      <div class="section-label"><h3>Skills</h3></div>
+      <div class="section-title"></div>
+      <p class="section-sub">
+      <div class="placeholder-box">
+        <p><h3>Electrical & Systems</h3></p>
+        <pclass="section-sub">Real-world electrical systems understanding, Power electronics fundamentals, Motor drive concepts and control logic, Sensor interfacing and system monitoring, Renewable energy and power backup concepts</pclass>
+      </div><br>
+      <div class="placeholder-box">
+        <p><h3>Software & Programming</h3></p>
+        <pclass="section-sub">Python, Java(backend fundamentals),
+          Web technologies: HTML, CSS, JavaScript(Fundamentals),
+          Streamlit for interactive applications,
+          Database basics (MySQL)</pclass>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <div class="section-label"><h3>Contact</h3></div>
+      <div class="section-title">Let’s work together</div>
+      <p class="section-sub">
+      </p>
+      <div class="placeholder-box">
+        Email: dineshrajabhaktula2@gmail.com<br>
+        <a href="https://www.linkedin.com/in/dinesh-rajabhaktula-823867312"><h4>LinkedIn</h4></a>
+        <a href="https://github.com/dineshrajabhaktula"><h4>GitHub</h4></a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © <span id="year"></span> Rajabhaktula Dinesh. All rights reserved.0413 
+  </footer>
+</div>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  let opened = false;
+  function openSiteFromCenter() {
+    if (opened) return;
+    opened = true;
+    const intro = document.getElementById('intro');
+    const page = document.getElementById('page');
+    intro.classList.add('hidden');
+    page.classList.add('active');
+  }
+
+  // Trigger slow open on first mouse move or touch
+  window.addEventListener('mousemove', openSiteFromCenter, { once: true });
+  window.addEventListener('touchstart', openSiteFromCenter, { once: true });
+</script>
+
+</body>
+</html>
